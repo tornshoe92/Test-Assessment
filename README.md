@@ -257,17 +257,18 @@ share that fails to apply.
 
 Each test starts from an empty schema and rebuilds a known fixture, deleting in
 foreign-key order so the real constraints get exercised.
-##
+
+---
 
 ## Key design choices
 
-1. **AI-assissted**: Given that the instructions explicitly state that all available tools including AI tools are encouraged, and given the time-constraint for the task, I elected to use Claude Code (Opus 5.5 High) for the initial code generation.  As AI-generated code can be risky or a contentious subject, I wanted to provide additional reasoning:
+1. **AI-assisted**: Given that the instructions explicitly state that all available tools including AI tools are encouraged, and given the time-constraint for the task, I elected to use Claude Code (Opus 5 High) for the initial code generation.  As AI-generated code can be risky or a contentious subject, I wanted to provide additional reasoning:
     1. While code quality and security are legitimate concerns for code intended to enter into production, there are inherent tradeoffs
 for smaller internal-only tasks developed under tight time constraints.
     2. Initial code quality concerns are mitigated by carefully crafting AI tool prompting prior to code generation to provide high levels of
 context and detailed purpose to the tool.  Subsequent quality improvements are made by developer review and edits prior to the initial commit.
     3. Security concerns, while minimal in projects intended only for internal or personal use when compared to production systems, are
-nonetheless critical items for any development work, particularly those involving AI tool assisstance.
+nonetheless critical items for any development work, particularly those involving AI tool assistance.
     4. Providing example users with basic provided passwords was determined to be acceptable for this task as an example, but all
 provided contents were reviewed to confirm that no real-world security issues were present (ex: exposed GitHub credentials).
 
@@ -278,9 +279,7 @@ and access management is critical.  It would be unwise to not demonstrate some a
 can hinder rather than help if they block legitimate access and/or don't stop bad actors.
 
 3. **Test coverage**: Based on my experience in my current and previous roles, taking the time now to implement tests prevents breakdowns
-and headaches in the future.  While unit and integration tests are generally critical (and implemented here) for validating happy/sad paths for internal code and external request/response handling, it is also important for more robust systems to incorporate performance and destructive testing to provide team members and leadership with confidence in the system's ability to withstand less-than-ideal conditions.  While performance and destructive tests were not included in this project due to time constraints, they would be on my short list of next-steps before or shortly after production deployment, depending on user onboarding strategy.
-
-
+and headaches in the future.  While unit and integration tests are generally critical (and implemented here) for validating happy/sad paths for internal code and external request/response handling, it is also important for more robust systems to incorporate performance and destructive testing to provide team members and leadership with confidence in the system's ability to withstand less-than-ideal conditions.  While performance and destructive tests were not included in this project due to time constraints, they would be on my short list of next steps before or shortly after production deployment, depending on user onboarding strategy.
 
 ---
 
@@ -292,11 +291,11 @@ Roughly in the order I would pick it up:
    note with users in team B without authorization between teams.
 2. **Replace Basic auth** with JWT or an OAuth2 resource server, and add user
    registration — right now users only arrive via the seeder.
-4. **Restrict `sort`** to an allow-list of fields. Today any note property is
+3. **Restrict `sort`** to an allow-list of fields. Today any note property is
    sortable, which leaks a little of the schema shape.
-5. **Note history**, so an unwanted edit by a teammate with WRITE access can be
+4. **Note history**, so an unwanted edit by a teammate with WRITE access can be
    recovered.
-6. **Rate limiting and audit logging** on the sharing endpoints.
+5. **Rate limiting and audit logging** on the sharing endpoints.
 
 ### Known limits
 
