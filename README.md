@@ -257,6 +257,30 @@ share that fails to apply.
 
 Each test starts from an empty schema and rebuilds a known fixture, deleting in
 foreign-key order so the real constraints get exercised.
+##
+
+## Key design choices
+
+1. **AI-assissted**: Given that the instructions explicitly state that all available tools including AI tools are encouraged, and given the time-constraint for the task, I elected to use Claude Code (Opus 5.5 High) for the initial code generation.  As AI-generated code can be risky or a contentious subject, I wanted to provide additional reasoning:
+    1. While code quality and security are legitimate concerns for code intended to enter into production, there are inherent tradeoffs
+for smaller internal-only tasks developed under tight time constraints.
+    2. Initial code quality concerns are mitigated by carefully crafting AI tool prompting prior to code generation to provide high levels of
+context and detailed purpose to the tool.  Subsequent quality improvements are made by developer review and edits prior to the initial commit.
+    3. Security concerns, while minimal in projects intended only for internal or personal use when compared to production systems, are
+nonetheless critical items for any development work, particularly those involving AI tool assisstance.
+    4. Providing example users with basic provided passwords was determined to be acceptable for this task as an example, but all
+provided contents were reviewed to confirm that no real-world security issues were present (ex: exposed GitHub credentials).
+
+2. **User/Team security**: While not specified in the task instructions, user and team access management was an important design choice for the following reasons:
+    1. While this is just an example task for a simple REST service, the role being tested for is for an organization where application security
+and access management is critical.  It would be unwise to not demonstrate some acknowledgement of access management even in a simple implementation.
+    2. In almost every case, simple security is better than no security, so long as it's done well.  Incorrectly implemented security features 
+can hinder rather than help if they block legitimate access and/or don't stop bad actors.
+
+3. **Test coverage**: Based on my experience in my current and previous roles, taking the time now to implement tests prevents breakdowns
+and headaches in the future.  While unit and integration tests are generally critical (and implemented here) for validating happy/sad paths for internal code and external request/response handling, it is also important for more robust systems to incorporate performance and destructive testing to provide team members and leadership with confidence in the system's ability to withstand less-than-ideal conditions.  While performance and destructive tests were not included in this project due to time constraints, they would be on my short list of next-steps before or shortly after production deployment, depending on user onboarding strategy.
+
+
 
 ---
 
@@ -268,9 +292,6 @@ Roughly in the order I would pick it up:
    note with users in team B without authorization between teams.
 2. **Replace Basic auth** with JWT or an OAuth2 resource server, and add user
    registration — right now users only arrive via the seeder.
-3. **Full-text search.** `LIKE '%term%'` cannot use an index; a PostgreSQL
-   `tsvector` column or a dedicated search index is the real answer once note
-    count increases dramatically.
 4. **Restrict `sort`** to an allow-list of fields. Today any note property is
    sortable, which leaks a little of the schema shape.
 5. **Note history**, so an unwanted edit by a teammate with WRITE access can be
